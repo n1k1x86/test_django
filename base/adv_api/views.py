@@ -1,11 +1,16 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 from .models import AdvModel
 from .serializers import AdvModelSerializer
 from django.http import Http404
 
 class AdvModelListCreateAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
     def get(self, request):
         queryset = AdvModel.objects.all()
         serializer = AdvModelSerializer(queryset, many=True)
@@ -19,6 +24,9 @@ class AdvModelListCreateAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AdvModelRetrieveUpdateAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
     def get_object(self, pk):
         try:
             return AdvModel.objects.get(pk=pk)
