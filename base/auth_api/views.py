@@ -12,7 +12,10 @@ from .serializers import UserModelSerializer, RegisterUserSerializer
 class RegisterAPIView(generics.GenericAPIView):
     serializer_class = RegisterUserSerializer
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs) -> Response:
+        """
+        POST method for user registration
+        """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -22,7 +25,10 @@ class RegisterAPIView(generics.GenericAPIView):
         })
 
 class LoginAPIView(APIView):
-    def post(self, request):
+    def post(self, request) -> Response:
+        """
+        POST method for login user and getting auth token
+        """
         username = request.data.get('username')
         password = request.data.get('password')
 
@@ -38,6 +44,9 @@ class LogoutAPIView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def post(self, request) -> Response:
+        """
+        POST method for logout from system and deleting auth token
+        """
         request.user.auth_token.delete()
         return Response(status=status.HTTP_200_OK)

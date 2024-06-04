@@ -11,12 +11,18 @@ class AdvModelListCreateAPIView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
-    def get(self, request):
+    def get(self, request) -> Response:
+        """
+        GET method for getting list of adv_model objects
+        """
         queryset = AdvModel.objects.all()
         serializer = AdvModelSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
+    def post(self, request) -> Response:
+        """
+        POST method for adding data into database
+        """
         serializer = AdvModelSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -27,20 +33,29 @@ class AdvModelRetrieveUpdateAPIView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
-    def get_object(self, pk):
+    def get_object(self, pk) -> AdvModel:
+        """
+        Method for getting model object by id
+        """
         try:
             return AdvModel.objects.get(pk=pk)
         except AdvModel.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk):
-        your_model = self.get_object(pk)
-        serializer = AdvModelSerializer(your_model)
+    def get(self, request, pk) -> Response:
+        """
+        GET method for getting adv_model obj by id from database
+        """
+        model_obj = self.get_object(pk)
+        serializer = AdvModelSerializer(model_obj)
         return Response(serializer.data)
 
-    def put(self, request, pk):
-        your_model = self.get_object(pk)
-        serializer = AdvModelSerializer(your_model, data=request.data)
+    def put(self, request, pk) -> Response:
+        """
+        PUT method for editting adv_model by id
+        """
+        model_obj = self.get_object(pk)
+        serializer = AdvModelSerializer(model_obj, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
