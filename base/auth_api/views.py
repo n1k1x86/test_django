@@ -22,7 +22,7 @@ class RegisterAPIView(generics.GenericAPIView):
         return Response({
             "user": UserModelSerializer(user, context=self.get_serializer_context()).data,
             "token": Token.objects.create(user=user).key
-        })
+        }, status=201)
 
 class LoginAPIView(APIView):
     def post(self, request) -> Response:
